@@ -108,3 +108,14 @@ Edit your `composer.json` to add the dependency:
 	}
 }
 ```
+
+## Contribute
+
+Install dependencies with Composer:
+
+    composer install
+
+TODO:
+
+* Optimize the array traversals
+* Improve documentation ?
