@@ -2,6 +2,7 @@
     "name": "myclabs/array-comparator",
     "type": "library",
     "description": "Array comparator",
+    "keywords": ["array", "comparator"],
     "homepage": "https://github.com/myclabs/ArrayComparator",
     "license": "MIT",
 	"autoload": {
