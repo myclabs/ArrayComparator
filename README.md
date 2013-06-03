@@ -1,2 +1,3 @@
-ArrayComparator
-===============
+# ArrayComparator
+
+Array comparison.
