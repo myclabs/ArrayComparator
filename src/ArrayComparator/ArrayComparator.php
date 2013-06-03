@@ -20,6 +20,18 @@ class ArrayComparator
     private $array2;
 
     /**
+     * Closure comparing 2 items and returning if they have the same identity
+     * @var callable function($item1, $item2) returns true or false
+     */
+    private $itemIdentityComparator;
+
+    /**
+     * Closure comparing 2 items and returning if there are differences
+     * @var callable function($item1, $item2) returns true or false
+     */
+    private $itemComparator;
+
+    /**
      * Closure executed when items are different
      * @var callable function($item1, $item2)
      */
@@ -45,6 +57,14 @@ class ArrayComparator
     {
         $this->array1 = $array1;
         $this->array2 = $array2;
+
+        // Default behaviors
+        $this->itemIdentityComparator = function($item1, $item2) {
+            return $item1 === $item2;
+        };
+        $this->itemComparator = function($item1, $item2) {
+            return $item1 == $item2;
+        };
     }
 
     /**
@@ -52,6 +72,7 @@ class ArrayComparator
      */
     public function compare()
     {
+        $compareItems = $this->itemComparator;
         $whenDifferent = $this->whenDifferent;
         $whenMissingLeft = $this->whenMissingLeft;
         $whenMissingRight = $this->whenMissingRight;
@@ -59,9 +80,13 @@ class ArrayComparator
         foreach ($this->array1 as $item1) {
             $item2 = $this->searchItem($item1, $this->array2);
 
-            if ($item2 !== null && $whenDifferent) {
-                // Items are different
-                $whenDifferent($item1, $item2);
+            if ($item2 !== null) {
+                // Compare 2 items
+                $itemsAreEqual = $compareItems($item1, $item2);
+                if (!$itemsAreEqual) {
+                    // Items are different
+                    $whenDifferent($item1, $item2);
+                }
             } elseif ($whenMissingRight) {
                 // Item from left array is missing from right array
                 $whenMissingRight($item1);
@@ -76,6 +101,30 @@ class ArrayComparator
                 $whenMissingLeft($item2);
             }
         }
+    }
+
+    /**
+     * Closure comparing 2 items and returning if they have the same identity
+     * @var callable $callback function($item1, $item2) returns true or false
+     * @return $this
+     */
+    public function setItemIdentityComparator($callback)
+    {
+        $this->itemIdentityComparator = $callback;
+
+        return $this;
+    }
+
+    /**
+     * Closure comparing 2 items and returning if there are differences
+     * @var callable $callback function($item1, $item2) returning true or false
+     * @return $this
+     */
+    public function setItemComparator($callback)
+    {
+        $this->itemComparator = $callback;
+
+        return $this;
     }
 
     /**
@@ -116,17 +165,14 @@ class ArrayComparator
 
     private function searchItem($item, array $array)
     {
+        $areSameItem = $this->itemIdentityComparator;
+
         foreach ($array as $arrayItem) {
-            if ($this->areItemsEqual($item, $arrayItem)) {
+            if ($areSameItem($item, $arrayItem)) {
                 return $arrayItem;
             }
         }
 
         return null;
-    }
-
-    private function areItemsEqual($item1, $item2)
-    {
-        return ($item1 === $item2);
     }
 }
