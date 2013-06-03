@@ -171,7 +171,7 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
     /**
      * Test when the same item is in both arrays, but has differences
      */
-    public function testWhenDifferencesWithCustomIdentityComparator()
+    public function testWhenDifferencesWithCustomComparators()
     {
         $object1 = new \stdClass();
         $object1->id = 1;
@@ -268,6 +268,43 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
         );
 
         $comparator->compare();
+    }
+
+    /**
+     * Test missing items from both arrays, with an indexed array
+     */
+    public function testMissingWithIndexedArray()
+    {
+        $comparator = new ArrayComparator(array('foo' => 'bar'), array('bim' => 'baz'));
+
+        $testCase = $this;
+
+        $callCountRight = 0;
+        $comparator->whenMissingRight(
+            function ($item) use (&$callCountRight, $testCase) {
+                $testCase->assertEquals('bar', $item);
+                $callCountRight++;
+            }
+        );
+
+        $callCountLeft = 0;
+        $comparator->whenMissingLeft(
+            function ($item) use (&$callCountLeft, $testCase) {
+                $testCase->assertEquals('baz', $item);
+                $callCountLeft++;
+            }
+        );
+
+        $comparator->whenDifferent(
+            function () {
+                throw new \Exception();
+            }
+        );
+
+        $comparator->compare();
+
+        $this->assertEquals(1, $callCountRight);
+        $this->assertEquals(1, $callCountLeft);
     }
 
 }
