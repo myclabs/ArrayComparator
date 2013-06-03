@@ -59,10 +59,10 @@ class ArrayComparator
         foreach ($this->array1 as $item1) {
             $item2 = $this->searchItem($item1, $this->array2);
 
-            if ($item2 !== null) {
+            if ($item2 !== null && $whenDifferent) {
                 // Items are different
                 $whenDifferent($item1, $item2);
-            } else {
+            } elseif ($whenMissingRight) {
                 // Item from left array is missing from right array
                 $whenMissingRight($item1);
             }
@@ -71,7 +71,7 @@ class ArrayComparator
         foreach ($this->array2 as $item2) {
             $item1 = $this->searchItem($item2, $this->array1);
 
-            if ($item1 === null) {
+            if ($item1 === null && $whenMissingLeft) {
                 // Item from right array is missing from left array
                 $whenMissingLeft($item2);
             }
