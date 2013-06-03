@@ -24,6 +24,44 @@ $comparator->whenDifferent(function ($item1, $item2) {
 $comparator->compare();
 ```
 
+## Documentation
+
+* `setItemIdentityComparator`
+
+```php
+$comparator->setItemIdentityComparator(function ($item1, $item2) {
+});
+```
+
+* `setItemComparator`
+
+```php
+$comparator->setItemComparator(function ($item1, $item2) {
+});
+```
+
+* `whenDifferent` - Called when 2 items are found in both arrays, but are differents
+
+```php
+$comparator->whenDifferent(function ($item1, $item2) {
+});
+```
+
+* `whenMissingRight` - Called when an item is in the first array (left array) but not in the second (right array)
+
+```php
+$comparator->whenMissingRight(function ($item1) {
+});
+```
+
+* `whenMissingLeft` - Called when an item is in the second array (right array) but not in the first (left array)
+
+```php
+$comparator->whenMissingLeft(function ($item2) {
+});
+```
+
+
 ## Installation
 
 Edit your `composer.json` to add the dependency:
