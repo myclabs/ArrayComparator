@@ -2,6 +2,19 @@
 
 Array comparison helper.
 
+## Principle
+
+Here is the default behavior:
+
+Array 1    | Array 2    | Method called
+-----------|------------|--------------
+foo => Foo | foo => Foo |
+bar => Bar | bar => Foo | whenDifferent
+baz => Baz |            | whenMissingRight
+           | bam => Bam | whenMissingLeft
+
+By default, array keys are compared. This behavior can be customized.
+
 ## Usage
 
 ```php
