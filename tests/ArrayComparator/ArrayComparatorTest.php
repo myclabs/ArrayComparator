@@ -13,6 +13,9 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
         $comparator->compare();
     }
 
+    /**
+     * Test that no comparison function is called with empty arrays
+     */
     public function testCompareEmptyArrays()
     {
         $comparator = new ArrayComparator(array(), array());
@@ -36,6 +39,9 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
         $comparator->compare();
     }
 
+    /**
+     * Test when an item is missing from the right array
+     */
     public function testWhenMissingRight()
     {
         $comparator = new ArrayComparator(array('foo'), array());
@@ -65,6 +71,9 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $callCount);
     }
 
+    /**
+     * Test when an item is missing from the left array
+     */
     public function testWhenMissingLeft()
     {
         $comparator = new ArrayComparator(array(), array('foo'));
@@ -94,7 +103,10 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $callCount);
     }
 
-    public function testWhenDifferent()
+    /**
+     * Test when the same item is in both arrays, but has differences
+     */
+    public function testWhenDifferences()
     {
         $object1 = new \stdClass();
         $object1->id = 1;
@@ -143,6 +155,54 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
         $comparator->compare();
 
         $this->assertEquals(1, $callCount);
+    }
+
+    /**
+     * Test when the same item is in both arrays and has no differences
+     */
+    public function testWhenNoDifferences()
+    {
+        $object1 = new \stdClass();
+        $object1->id = 1;
+        $object1->name = 'foo';
+
+        $object2 = new \stdClass();
+        $object2->id = 1;
+        $object2->name = 'foo';
+
+        $comparator = new ArrayComparator(array($object1), array($object2));
+
+        $comparator->setItemIdentityComparator(
+            function ($item1, $item2) {
+                return $item1->id === $item2->id;
+            }
+        );
+
+        // Compares the names of the objects
+        $comparator->setItemComparator(
+            function ($item1, $item2) {
+                return $item1->name === $item2->name;
+            }
+        );
+
+        $comparator->whenMissingRight(
+            function () {
+                throw new \Exception();
+            }
+        );
+        $comparator->whenMissingLeft(
+            function () {
+                throw new \Exception();
+            }
+        );
+
+        $comparator->whenDifferent(
+            function () {
+                throw new \Exception();
+            }
+        );
+
+        $comparator->compare();
     }
 
 }
