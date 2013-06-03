@@ -1,11 +1,13 @@
 <?php
+/**
+ * @author  Matthieu Napoli <matthieu@mnapoli.fr>
+ * @license http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
+ */
 
 namespace ArrayComparator;
 
 /**
  * Compares 2 arrays
- *
- * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 class ArrayComparator
 {

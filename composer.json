@@ -1,4 +1,9 @@
 {
+    "name": "myclabs/array-comparator",
+    "type": "library",
+    "description": "Array comparator",
+    "homepage": "https://github.com/myclabs/ArrayComparator",
+    "license": "MIT",
 	"autoload": {
 		"psr-0": {
 			"ArrayComparator": "src/"
