@@ -83,7 +83,7 @@ class ArrayComparator
      * @param callable $callback function($item1, $item2)
      * @return $this
      */
-    public function whenDifferent(Closure $callback)
+    public function whenDifferent($callback)
     {
         $this->whenDifferent = $callback;
 
@@ -95,7 +95,7 @@ class ArrayComparator
      * @param callable $callback function($item2)
      * @return $this
      */
-    public function whenMissingLeft(Closure $callback)
+    public function whenMissingLeft($callback)
     {
         $this->whenMissingLeft = $callback;
 
@@ -107,7 +107,7 @@ class ArrayComparator
      * @var callable $callback function($item1)
      * @return $this
      */
-    public function whenMissingRight(Closure $callback)
+    public function whenMissingRight($callback)
     {
         $this->whenMissingRight = $callback;
 
