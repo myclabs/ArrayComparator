@@ -23,7 +23,7 @@ class ArrayComparator
 
     /**
      * Closure comparing 2 items and returning if they have the same identity
-     * @var callable function($item1, $item2) returns true or false
+     * @var callable function($key1, $key2, $item1, $item2) returns true or false
      */
     private $itemIdentityComparator;
 
@@ -61,8 +61,8 @@ class ArrayComparator
         $this->array2 = $array2;
 
         // Default behaviors
-        $this->itemIdentityComparator = function($item1, $item2) {
-            return $item1 === $item2;
+        $this->itemIdentityComparator = function($key1, $key2, $item1, $item2) {
+            return $key1 === $key2;
         };
         $this->itemComparator = function($item1, $item2) {
             return $item1 == $item2;
@@ -79,8 +79,8 @@ class ArrayComparator
         $whenMissingLeft = $this->whenMissingLeft;
         $whenMissingRight = $this->whenMissingRight;
 
-        foreach ($this->array1 as $item1) {
-            $item2 = $this->searchItem($item1, $this->array2);
+        foreach ($this->array1 as $key1 => $item1) {
+            $item2 = $this->searchItem($key1, $item1, $this->array2);
 
             if ($item2 !== null) {
                 // Compare 2 items
@@ -95,8 +95,8 @@ class ArrayComparator
             }
         }
 
-        foreach ($this->array2 as $item2) {
-            $item1 = $this->searchItem($item2, $this->array1);
+        foreach ($this->array2 as $key2 => $item2) {
+            $item1 = $this->searchItem($key2, $item2, $this->array1);
 
             if ($item1 === null && $whenMissingLeft) {
                 // Item from right array is missing from left array
@@ -107,7 +107,7 @@ class ArrayComparator
 
     /**
      * Closure comparing 2 items and returning if they have the same identity
-     * @var callable $callback function($item1, $item2) returns true or false
+     * @var callable $callback function($key1, $key2, $item1, $item2) returns true or false
      * @return $this
      */
     public function setItemIdentityComparator($callback)
@@ -165,13 +165,13 @@ class ArrayComparator
         return $this;
     }
 
-    private function searchItem($item, array $array)
+    private function searchItem($key1, $item1, array $array)
     {
         $areSameItem = $this->itemIdentityComparator;
 
-        foreach ($array as $arrayItem) {
-            if ($areSameItem($item, $arrayItem)) {
-                return $arrayItem;
+        foreach ($array as $key2 => $item2) {
+            if ($areSameItem($key1, $key2, $item1, $item2)) {
+                return $item2;
             }
         }
 

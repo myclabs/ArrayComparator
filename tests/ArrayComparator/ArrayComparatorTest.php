@@ -24,19 +24,18 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
             function () {
                 throw new \Exception();
             }
-        );
-        $comparator->whenMissingLeft(
+        )
+        ->whenMissingLeft(
             function () {
                 throw new \Exception();
             }
-        );
-        $comparator->whenMissingRight(
+        )
+        ->whenMissingRight(
             function () {
                 throw new \Exception();
             }
-        );
-
-        $comparator->compare();
+        )
+        ->compare();
     }
 
     /**
@@ -108,6 +107,72 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testWhenDifferences()
     {
+        $comparator = new ArrayComparator(array('foo'), array('bar'));
+
+        $comparator->whenMissingRight(
+            function () {
+                throw new \Exception();
+            }
+        );
+        $comparator->whenMissingLeft(
+            function () {
+                throw new \Exception();
+            }
+        );
+
+        $callCount = 0;
+        $testCase = $this;
+        $comparator->whenDifferent(
+            function ($item1, $item2) use (&$callCount, $testCase) {
+                $testCase->assertEquals('foo', $item1);
+                $testCase->assertEquals('bar', $item2);
+                $callCount++;
+            }
+        );
+
+        $comparator->compare();
+
+        $this->assertEquals(1, $callCount);
+    }
+
+    /**
+     * Test when the same item is in both arrays, but has differences
+     */
+    public function testWhenDifferencesWithIndexedArray()
+    {
+        $comparator = new ArrayComparator(array('foo' => 'bar'), array('foo' => 'baz'));
+
+        $comparator->whenMissingRight(
+            function () {
+                throw new \Exception();
+            }
+        );
+        $comparator->whenMissingLeft(
+            function () {
+                throw new \Exception();
+            }
+        );
+
+        $callCount = 0;
+        $testCase = $this;
+        $comparator->whenDifferent(
+            function ($item1, $item2) use (&$callCount, $testCase) {
+                $testCase->assertEquals('bar', $item1);
+                $testCase->assertEquals('baz', $item2);
+                $callCount++;
+            }
+        );
+
+        $comparator->compare();
+
+        $this->assertEquals(1, $callCount);
+    }
+
+    /**
+     * Test when the same item is in both arrays, but has differences
+     */
+    public function testWhenDifferencesWithCustomIdentityComparator()
+    {
         $object1 = new \stdClass();
         $object1->id = 1;
         $object1->name = 'foo';
@@ -119,7 +184,7 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
         $comparator = new ArrayComparator(array($object1), array($object2));
 
         $comparator->setItemIdentityComparator(
-            function ($item1, $item2) {
+            function ($key1, $key2, $item1, $item2) {
                 return $item1->id === $item2->id;
             }
         );
@@ -173,7 +238,7 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
         $comparator = new ArrayComparator(array($object1), array($object2));
 
         $comparator->setItemIdentityComparator(
-            function ($item1, $item2) {
+            function ($key1, $key2, $item1, $item2) {
                 return $item1->id === $item2->id;
             }
         );
