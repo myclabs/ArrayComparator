@@ -12,16 +12,6 @@ namespace ArrayComparator;
 class ArrayComparator
 {
     /**
-     * @var array
-     */
-    private $array1;
-
-    /**
-     * @var array
-     */
-    private $array2;
-
-    /**
      * Closure comparing 2 items and returning if they have the same identity
      * @var callable function($key1, $key2, $item1, $item2) returns true or false
      */
@@ -52,14 +42,10 @@ class ArrayComparator
     private $whenMissingRight;
 
     /**
-     * @param array $array1 Left array
-     * @param array $array2 Right array
+     * Constructor
      */
-    public function __construct(array $array1, array $array2)
+    public function __construct()
     {
-        $this->array1 = $array1;
-        $this->array2 = $array2;
-
         // Default behaviors
         $this->itemIdentityComparator = function($key1, $key2, $item1, $item2) {
             return $key1 === $key2;
@@ -72,15 +58,15 @@ class ArrayComparator
     /**
      * Run the comparison over the arrays
      */
-    public function compare()
+    public function compare(array $array1, array $array2)
     {
         $compareItems = $this->itemComparator;
         $whenDifferent = $this->whenDifferent;
         $whenMissingLeft = $this->whenMissingLeft;
         $whenMissingRight = $this->whenMissingRight;
 
-        foreach ($this->array1 as $key1 => $item1) {
-            $item2 = $this->searchItem($key1, $item1, $this->array2);
+        foreach ($array1 as $key1 => $item1) {
+            $item2 = $this->searchItem($key1, $item1, $array2);
 
             if ($item2 !== null) {
                 // Compare 2 items
@@ -95,8 +81,8 @@ class ArrayComparator
             }
         }
 
-        foreach ($this->array2 as $key2 => $item2) {
-            $item1 = $this->searchItem($key2, $item2, $this->array1);
+        foreach ($array2 as $key2 => $item2) {
+            $item1 = $this->searchItem($key2, $item2, $array1);
 
             if ($item1 === null && $whenMissingLeft) {
                 // Item from right array is missing from left array

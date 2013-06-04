@@ -9,8 +9,8 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
 
     public function testNoError()
     {
-        $comparator = new ArrayComparator(array(), array());
-        $comparator->compare();
+        $comparator = new ArrayComparator();
+        $comparator->compare(array(), array());
     }
 
     /**
@@ -18,7 +18,7 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testCompareEmptyArrays()
     {
-        $comparator = new ArrayComparator(array(), array());
+        $comparator = new ArrayComparator();
 
         $comparator->whenDifferent(
             function () {
@@ -35,7 +35,7 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
                 throw new \Exception();
             }
         )
-        ->compare();
+        ->compare(array(), array());
     }
 
     /**
@@ -43,7 +43,7 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testWhenMissingRight()
     {
-        $comparator = new ArrayComparator(array('foo'), array());
+        $comparator = new ArrayComparator();
 
         $comparator->whenDifferent(
             function () {
@@ -65,7 +65,7 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
             }
         );
 
-        $comparator->compare();
+        $comparator->compare(array('foo'), array());
 
         $this->assertEquals(1, $callCount);
     }
@@ -75,7 +75,7 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testWhenMissingLeft()
     {
-        $comparator = new ArrayComparator(array(), array('foo'));
+        $comparator = new ArrayComparator();
 
         $comparator->whenDifferent(
             function () {
@@ -97,7 +97,7 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
             }
         );
 
-        $comparator->compare();
+        $comparator->compare(array(), array('foo'));
 
         $this->assertEquals(1, $callCount);
     }
@@ -107,7 +107,7 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testWhenDifferences()
     {
-        $comparator = new ArrayComparator(array('foo'), array('bar'));
+        $comparator = new ArrayComparator();
 
         $comparator->whenMissingRight(
             function () {
@@ -130,7 +130,7 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
             }
         );
 
-        $comparator->compare();
+        $comparator->compare(array('foo'), array('bar'));
 
         $this->assertEquals(1, $callCount);
     }
@@ -140,7 +140,7 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testWhenDifferencesWithIndexedArray()
     {
-        $comparator = new ArrayComparator(array('foo' => 'bar'), array('foo' => 'baz'));
+        $comparator = new ArrayComparator();
 
         $comparator->whenMissingRight(
             function () {
@@ -163,7 +163,7 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
             }
         );
 
-        $comparator->compare();
+        $comparator->compare(array('foo' => 'bar'), array('foo' => 'baz'));
 
         $this->assertEquals(1, $callCount);
     }
@@ -181,7 +181,7 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
         $object2->id = 1;
         $object2->name = 'bar';
 
-        $comparator = new ArrayComparator(array($object1), array($object2));
+        $comparator = new ArrayComparator();
 
         $comparator->setItemIdentityComparator(
             function ($key1, $key2, $item1, $item2) {
@@ -217,7 +217,7 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
             }
         );
 
-        $comparator->compare();
+        $comparator->compare(array($object1), array($object2));
 
         $this->assertEquals(1, $callCount);
     }
@@ -235,7 +235,7 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
         $object2->id = 1;
         $object2->name = 'foo';
 
-        $comparator = new ArrayComparator(array($object1), array($object2));
+        $comparator = new ArrayComparator();
 
         $comparator->setItemIdentityComparator(
             function ($key1, $key2, $item1, $item2) {
@@ -267,7 +267,7 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
             }
         );
 
-        $comparator->compare();
+        $comparator->compare(array($object1), array($object2));
     }
 
     /**
@@ -275,7 +275,7 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testMissingWithIndexedArray()
     {
-        $comparator = new ArrayComparator(array('foo' => 'bar'), array('bim' => 'baz'));
+        $comparator = new ArrayComparator();
 
         $testCase = $this;
 
@@ -301,7 +301,7 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
             }
         );
 
-        $comparator->compare();
+        $comparator->compare(array('foo' => 'bar'), array('bim' => 'baz'));
 
         $this->assertEquals(1, $callCountRight);
         $this->assertEquals(1, $callCountLeft);
