@@ -63,6 +63,12 @@ $comparator->whenDifferent(function ($item1, $item2) {
 $comparator->compare();
 ```
 
+Note that you can also use any PHP callable format instead of inline functions, for example:
+
+```php
+$comparator->whenDifferent(array($this, 'whenDifferent'));
+```
+
 ## Documentation
 
 * `whenDifferent` - Called when 2 items are found in both arrays, but are differents
