@@ -2,6 +2,8 @@
 
 Array comparison helper.
 
+[![Build Status](https://travis-ci.org/myclabs/ArrayComparator.png)](https://travis-ci.org/myclabs/ArrayComparator)
+
 ## Principle
 
 Here is the default behavior:
