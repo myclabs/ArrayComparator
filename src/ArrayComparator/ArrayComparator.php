@@ -46,15 +46,9 @@ class ArrayComparator
      */
     public function __construct()
     {
-        $comparator = $this;
-
         // Default behaviors
-        $this->itemIdentityComparator = function($key1, $key2, $item1, $item2) use ($comparator) {
-            return $comparator->areSame($key1, $key2, $item1, $item2);
-        };
-        $this->itemComparator = function($item1, $item2) use ($comparator) {
-            return $comparator->areEqual($item1, $item2);
-        };
+        $this->itemIdentityComparator = array($this, 'areSame');
+        $this->itemComparator = array($this, 'areEqual');
     }
 
     /**
