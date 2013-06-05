@@ -66,14 +66,14 @@ class ArrayComparator
 
             if ($item2 !== null) {
                 // Compare 2 items
-                $itemsAreEqual = $compareItems($item1, $item2);
+                $itemsAreEqual = call_user_func($compareItems, $item1, $item2);
                 if (!$itemsAreEqual) {
                     // Items are different
-                    $whenDifferent($item1, $item2);
+                    call_user_func($whenDifferent, $item1, $item2);
                 }
             } elseif ($whenMissingRight) {
                 // Item from left array is missing from right array
-                $whenMissingRight($item1);
+                call_user_func($whenMissingRight, $item1);
             }
         }
 
@@ -82,7 +82,7 @@ class ArrayComparator
 
             if ($item1 === null && $whenMissingLeft) {
                 // Item from right array is missing from left array
-                $whenMissingLeft($item2);
+                call_user_func($whenMissingLeft, $item2);
             }
         }
     }
@@ -178,7 +178,7 @@ class ArrayComparator
         $areSameItem = $this->itemIdentityComparator;
 
         foreach ($array as $key2 => $item2) {
-            if ($areSameItem($key1, $key2, $item1, $item2)) {
+            if (call_user_func($areSameItem, $key1, $key2, $item1, $item2)) {
                 return $item2;
             }
         }
