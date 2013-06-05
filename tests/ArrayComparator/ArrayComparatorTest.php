@@ -169,7 +169,7 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test when the same item is in both arrays, but has differences
+     * Test with overridden comparator behaviors
      */
     public function testWhenDifferencesWithCustomComparators()
     {
@@ -217,7 +217,48 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
             }
         );
 
-        $comparator->compare(array($object1), array($object2));
+        $comparator->compare(array(1 => $object1), array(2 => $object2));
+
+        $this->assertEquals(1, $callCount);
+    }
+
+    /**
+     * Test with overridden comparator class
+     */
+    public function testWhenDifferencesWithCustomComparatorClass()
+    {
+        $object1 = new \stdClass();
+        $object1->id = 1;
+        $object1->name = 'foo';
+
+        $object2 = new \stdClass();
+        $object2->id = 1;
+        $object2->name = 'bar';
+
+        $comparator = new CustomComparator();
+
+        $comparator->whenMissingRight(
+            function () {
+                throw new \Exception();
+            }
+        );
+        $comparator->whenMissingLeft(
+            function () {
+                throw new \Exception();
+            }
+        );
+
+        $callCount = 0;
+        $testCase = $this;
+        $comparator->whenDifferent(
+            function ($item1, $item2) use (&$callCount, $testCase) {
+                $testCase->assertEquals('foo', $item1->name);
+                $testCase->assertEquals('bar', $item2->name);
+                $callCount++;
+            }
+        );
+
+        $comparator->compare(array(1 => $object1), array(2 => $object2));
 
         $this->assertEquals(1, $callCount);
     }
@@ -307,4 +348,27 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $callCountLeft);
     }
 
+}
+
+/**
+ * Custom comparator by extending the Comparator class
+ * @package ArrayComparator
+ */
+class CustomComparator extends ArrayComparator
+{
+    /**
+     * {@inheritdoc}
+     */
+    protected function areSame($key1, $key2, $item1, $item2)
+    {
+        return $item1->id === $item2->id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function areEqual($item1, $item2)
+    {
+        return $item1->name === $item2->name;
+    }
 }

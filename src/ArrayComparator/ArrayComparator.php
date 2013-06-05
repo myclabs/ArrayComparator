@@ -46,12 +46,14 @@ class ArrayComparator
      */
     public function __construct()
     {
+        $comparator = $this;
+
         // Default behaviors
-        $this->itemIdentityComparator = function($key1, $key2, $item1, $item2) {
-            return $key1 === $key2;
+        $this->itemIdentityComparator = function($key1, $key2, $item1, $item2) use ($comparator) {
+            return $comparator->areSame($key1, $key2, $item1, $item2);
         };
-        $this->itemComparator = function($item1, $item2) {
-            return $item1 == $item2;
+        $this->itemComparator = function($item1, $item2) use ($comparator) {
+            return $comparator->areEqual($item1, $item2);
         };
     }
 
@@ -149,6 +151,32 @@ class ArrayComparator
         $this->whenMissingRight = $callback;
 
         return $this;
+    }
+
+    /**
+     * Compares 2 items and returns if they have the same identity (if they represent the same item)
+     * @param mixed $key1 Array key of the first item
+     * @param mixed $key2 Array key of the second item
+     * @param mixed $item1
+     * @param mixed $item2
+     * @return boolean
+     */
+    protected function areSame($key1, $key2, $item1, $item2)
+    {
+        // Default behavior
+        return $key1 === $key2;
+    }
+
+    /**
+     * Compares 2 items and returns if there are differences
+     * @param mixed $item1
+     * @param mixed $item2
+     * @return boolean
+     */
+    protected function areEqual($item1, $item2)
+    {
+        // Default behavior
+        return $item1 == $item2;
     }
 
     private function searchItem($key1, $item1, array $array)

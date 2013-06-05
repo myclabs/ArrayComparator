@@ -109,6 +109,26 @@ $comparator->setItemComparator(function ($item1, $item2) {
 });
 ```
 
+## Custom comparator
+
+There is an alternative to using `setItemIdentityComparator` and `setItemComparator` by writing your own comparator class:
+
+```php
+class CustomComparator extends ArrayComparator
+{
+    protected function areSame($key1, $key2, $item1, $item2)
+    {
+        // Your stuff
+        return $item1->id === $item2->id;
+    }
+
+    protected function areEqual($item1, $item2)
+    {
+        // Your stuff
+        return $item1->name === $item2->name;
+    }
+}
+```
 
 ## Installation
 
@@ -122,6 +142,11 @@ Edit your `composer.json` to add the dependency:
 }
 ```
 
+## Changelog
+
+- 0.2: Allowed to extend the `ArrayComparator` class and write custom comparators
+- 0.1: First version
+
 ## Contribute
 
 Install dependencies with Composer:
@@ -130,5 +155,5 @@ Install dependencies with Composer:
 
 TODO:
 
-* Optimize the array traversals
-* Improve documentation ?
+- Optimize the array traversals
+- Improve documentation ?
