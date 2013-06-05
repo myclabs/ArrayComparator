@@ -150,8 +150,11 @@ Edit your `composer.json` to add the dependency:
 }
 ```
 
+ArrayComparator is tested with PHP 5.3 and greater.
+
 ## Changelog
 
+- 0.3: PHP 5.3 compatibility and support all PHP callable types
 - 0.2: Allowed to extend the `ArrayComparator` class and write custom comparators
 - 0.1: First version
 
