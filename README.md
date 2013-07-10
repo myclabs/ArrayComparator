@@ -2,7 +2,9 @@
 
 Array comparison helper.
 
+[![Latest Stable Version](https://poser.pugx.org/myclabs/array-comparator/v/stable.png)](https://packagist.org/packages/myclabs/array-comparator)
 [![Build Status](https://travis-ci.org/myclabs/ArrayComparator.png)](https://travis-ci.org/myclabs/ArrayComparator)
+[![Coverage Status](https://coveralls.io/repos/myclabs/ArrayComparator/badge.png?branch=master)](https://coveralls.io/r/myclabs/ArrayComparator?branch=master)
 
 ## Principle
 
@@ -145,7 +147,7 @@ Edit your `composer.json` to add the dependency:
 ```json
 {
 	"require": {
-		"myclabs/array-comparator": "*"
+		"myclabs/array-comparator": "1.0.*"
 	}
 }
 ```
@@ -154,6 +156,7 @@ ArrayComparator is tested with PHP 5.3 and greater.
 
 ## Changelog
 
+- 1.0: Stable version after testing and use in production (no change from 0.3)
 - 0.3: PHP 5.3 compatibility and support all PHP callable types
 - 0.2: Allowed to extend the `ArrayComparator` class and write custom comparators
 - 0.1: First version
