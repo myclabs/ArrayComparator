@@ -22,7 +22,7 @@ By default, array keys are compared. This behavior can be customized.
 ## Usage
 
 ```php
-$comparator = new ArrayComparator($array1, $array2);
+$comparator = new ArrayComparator();
 
 $comparator->whenDifferent(function ($item1, $item2) {
     // Do your stuff !
@@ -34,13 +34,13 @@ $comparator->whenDifferent(function ($item1, $item2) {
     // Do your stuff !
 });
 
-$comparator->compare();
+$comparator->compare($array1, $array2);
 ```
 
 Advanced example for Doctrine entities for example:
 
 ```php
-$comparator = new ArrayComparator($array1, $array2);
+$comparator = new ArrayComparator();
 
 // Set that items are considered the same if they have the same id
 $comparator->setItemIdentityComparator(function ($item1, $item2) {
@@ -62,7 +62,7 @@ $comparator->whenDifferent(function ($item1, $item2) {
     // Do your stuff !
 });
 
-$comparator->compare();
+$comparator->compare($array1, $array2);
 ```
 
 Note that you can also use any PHP callable format instead of inline functions, for example:
