@@ -43,7 +43,8 @@ Advanced example for Doctrine entities for example:
 $comparator = new ArrayComparator();
 
 // Set that items are considered the same if they have the same id
-$comparator->setItemIdentityComparator(function ($item1, $item2) {
+// Array keys are ignored in this example
+$comparator->setItemIdentityComparator(function ($key1, $key2, $item1, $item2) {
     return $item1->id === $item2->id;
 });
 
@@ -94,7 +95,7 @@ $comparator->whenMissingLeft(function ($item2) {
 });
 ```
 
-* `setItemIdentityComparator` - Overrides the default identity comparator which determine if 2 items should be compared
+* `setItemIdentityComparator` - Overrides the default identity comparator which determine if 2 items represent the same thing
 
 Can be used for example to compare the `id` of the items.
 
@@ -106,10 +107,9 @@ $comparator->setItemIdentityComparator(function ($key1, $key2, $item1, $item2) {
 });
 ```
 
-* `setItemComparator` - Overrides the default item comparator to determine if 2 items have differences
+* `setItemComparator` - Overrides the default item comparator to determine if 2 items (representing the same thing) have differences
 
-Can be used for example to compare specific attributes of the items. If the function returns true, the `whenDifferent`
-callback will be called. If the function returns false, either `whenMissingRight` or `whenMissingLeft` will be called.
+Can be used for example to compare specific attributes of the items. The function should return "is equal", i.e. `true` if items have no differences (then nothing is done because all is good), or `false` if they have differences (then `whenDifferent` is called).
 
 **The default behavior compares the items using `==`.**
 
