@@ -27,7 +27,7 @@ $comparator = new ArrayComparator();
 $comparator->whenEqual(function ($item1, $item2) {
     // Do your stuff !
 })
-$comparator->whenDifferent(function ($item1, $item2) {
+->whenDifferent(function ($item1, $item2) {
     // Do your stuff !
 })
 ->whenMissingRight(function ($item1) {
