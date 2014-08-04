@@ -24,7 +24,10 @@ By default, array keys are compared. This behavior can be customized.
 ```php
 $comparator = new ArrayComparator();
 
-$comparator->whenDifferent(function ($item1, $item2) {
+$comparator->whenEqual(function ($item1, $item2) {
+    // Do your stuff !
+})
+->whenDifferent(function ($item1, $item2) {
     // Do your stuff !
 })
 ->whenMissingRight(function ($item1) {
@@ -74,7 +77,14 @@ $comparator->whenDifferent(array($this, 'whenDifferent'));
 
 ## Documentation
 
-* `whenDifferent` - Called when 2 items are found in both arrays, but are differents
+* `whenEqual` - Called when 2 items are found in both arrays, and are equal
+
+```php
+$comparator->whenEqual(function ($item1, $item2) {
+});
+```
+
+* `whenDifferent` - Called when 2 items are found in both arrays, but are different
 
 ```php
 $comparator->whenDifferent(function ($item1, $item2) {

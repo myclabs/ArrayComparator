@@ -24,6 +24,12 @@ class ArrayComparator
     private $itemComparator;
 
     /**
+     * Closure executed when items are equal
+     * @var callable function($item1, $item2)
+     */
+    private $whenEqual;
+
+    /**
      * Closure executed when items are different
      * @var callable function($item1, $item2)
      */
@@ -57,6 +63,7 @@ class ArrayComparator
     public function compare(array $array1, array $array2)
     {
         $compareItems = $this->itemComparator;
+        $whenEqual = $this->whenEqual;
         $whenDifferent = $this->whenDifferent;
         $whenMissingLeft = $this->whenMissingLeft;
         $whenMissingRight = $this->whenMissingRight;
@@ -67,9 +74,12 @@ class ArrayComparator
             if ($item2 !== null) {
                 // Compare 2 items
                 $itemsAreEqual = call_user_func($compareItems, $item1, $item2);
-                if (!$itemsAreEqual) {
+                if (!$itemsAreEqual && $whenDifferent) {
                     // Items are different
                     call_user_func($whenDifferent, $item1, $item2);
+                } elseif ($itemsAreEqual && $whenEqual) {
+                    // Items are equal
+                    call_user_func($whenEqual, $item1, $item2);
                 }
             } elseif ($whenMissingRight) {
                 // Item from left array is missing from right array
@@ -107,6 +117,18 @@ class ArrayComparator
     public function setItemComparator($callback)
     {
         $this->itemComparator = $callback;
+
+        return $this;
+    }
+
+    /**
+     * Closure executed when items are equal
+     * @param callable $callback function($item1, $item2)
+     * @return $this
+     */
+    public function whenEqual($callback)
+    {
+        $this->whenEqual = $callback;
 
         return $this;
     }

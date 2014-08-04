@@ -20,22 +20,27 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
     {
         $comparator = new ArrayComparator();
 
-        $comparator->whenDifferent(
+        $comparator->whenEqual(
             function () {
                 throw new \Exception();
             }
         )
-        ->whenMissingLeft(
-            function () {
-                throw new \Exception();
-            }
-        )
-        ->whenMissingRight(
-            function () {
-                throw new \Exception();
-            }
-        )
-        ->compare(array(), array());
+            ->whenDifferent(
+                function () {
+                    throw new \Exception();
+                }
+            )
+            ->whenMissingLeft(
+                function () {
+                    throw new \Exception();
+                }
+            )
+            ->whenMissingRight(
+                function () {
+                    throw new \Exception();
+                }
+            )
+            ->compare(array(), array());
     }
 
     /**
@@ -45,6 +50,11 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
     {
         $comparator = new ArrayComparator();
 
+        $comparator->whenEqual(
+            function () {
+                throw new \Exception();
+            }
+        );
         $comparator->whenDifferent(
             function () {
                 throw new \Exception();
@@ -77,6 +87,11 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
     {
         $comparator = new ArrayComparator();
 
+        $comparator->whenEqual(
+            function () {
+                throw new \Exception();
+            }
+        );
         $comparator->whenDifferent(
             function () {
                 throw new \Exception();
@@ -109,6 +124,11 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
     {
         $comparator = new ArrayComparator();
 
+        $comparator->whenEqual(
+            function () {
+                throw new \Exception();
+            }
+        );
         $comparator->whenMissingRight(
             function () {
                 throw new \Exception();
@@ -142,6 +162,11 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
     {
         $comparator = new ArrayComparator();
 
+        $comparator->whenEqual(
+            function () {
+                throw new \Exception();
+            }
+        );
         $comparator->whenMissingRight(
             function () {
                 throw new \Exception();
@@ -196,6 +221,11 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
             }
         );
 
+        $comparator->whenEqual(
+            function () {
+                throw new \Exception();
+            }
+        );
         $comparator->whenMissingRight(
             function () {
                 throw new \Exception();
@@ -237,6 +267,11 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
 
         $comparator = new CustomComparator();
 
+        $comparator->whenEqual(
+            function () {
+                throw new \Exception();
+            }
+        );
         $comparator->whenMissingRight(
             function () {
                 throw new \Exception();
@@ -291,6 +326,15 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
             }
         );
 
+        $testCase = $this;
+
+        $callCountEqual = 0;
+        $comparator->whenEqual(
+            function () use (&$callCountEqual, $testCase) {
+                $callCountEqual++;
+            }
+        );
+
         $comparator->whenMissingRight(
             function () {
                 throw new \Exception();
@@ -309,6 +353,8 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
         );
 
         $comparator->compare(array($object1), array($object2));
+
+        $this->assertEquals(1, $callCountEqual);
     }
 
     /**
@@ -336,6 +382,11 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
             }
         );
 
+        $comparator->whenEqual(
+            function () {
+                throw new \Exception();
+            }
+        );
         $comparator->whenDifferent(
             function () {
                 throw new \Exception();
@@ -346,6 +397,69 @@ class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, $callCountRight);
         $this->assertEquals(1, $callCountLeft);
+    }
+
+    /**
+     * Test missing items from both arrays, with an indexed array
+     */
+    public function testComplexArray()
+    {
+        $comparator = new ArrayComparator();
+
+        $testCase = $this;
+
+        $callCountEqual = 0;
+        $comparator->whenEqual(
+            function ($item) use (&$callCountEqual, $testCase) {
+                $callCountEqual++;
+            }
+        );
+
+        $callCountDifferent = 0;
+        $comparator->whenDifferent(
+            function ($item) use (&$callCountDifferent, $testCase) {
+                $callCountDifferent++;
+            }
+        );
+
+        $callCountRight = 0;
+        $comparator->whenMissingRight(
+            function ($item) use (&$callCountRight, $testCase) {
+                $callCountRight++;
+            }
+        );
+
+        $callCountLeft = 0;
+        $comparator->whenMissingLeft(
+            function ($item) use (&$callCountLeft, $testCase) {
+                $callCountLeft++;
+            }
+        );
+
+        $comparator->compare(
+            array('foo' => '1', 'fuu' => '2', 'fii' => '3', 'bar' => '4'),
+            array('bim' => 'baz', 'foo' => '1', 'fuu' => '21', 'bar' => '51')
+        );
+
+        $this->assertEquals(1, $callCountEqual);
+        $this->assertEquals(2, $callCountDifferent);
+        $this->assertEquals(1, $callCountRight);
+        $this->assertEquals(1, $callCountLeft);
+    }
+
+    /**
+     * Test missing items from both arrays, with an indexed array
+     */
+    public function testNoCallableWorking()
+    {
+        $comparator = new ArrayComparator();
+
+        $comparator->compare(
+            array('foo' => '1', 'fuu' => '2', 'fii' => '3', 'bar' => '4'),
+            array('bim' => 'baz', 'foo' => '1', 'fuu' => '21', 'bar' => '51')
+        );
+
+        $this->assertTrue(true);
     }
 
 }
