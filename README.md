@@ -12,7 +12,7 @@ Here is the default behavior:
 
 Array 1    | Array 2    | Method called
 -----------|------------|--------------
-foo => Foo | foo => Foo | WhenEqual
+foo => Foo | foo => Foo | whenEqual
 bar => Bar | bar => Foo | whenDifferent
 baz => Baz |            | whenMissingRight
            | bam => Bam | whenMissingLeft
