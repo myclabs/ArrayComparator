@@ -12,7 +12,7 @@ Here is the default behavior:
 
 Array 1    | Array 2    | Method called
 -----------|------------|--------------
-foo => Foo | foo => Foo |
+foo => Foo | foo => Foo | WhenEqual
 bar => Bar | bar => Foo | whenDifferent
 baz => Baz |            | whenMissingRight
            | bam => Bam | whenMissingLeft
@@ -56,7 +56,10 @@ $comparator->setItemComparator(function ($item1, $item2) {
     return $item1->name === $item2->name;
 });
 
-$comparator->whenDifferent(function ($item1, $item2) {
+$comparator->whenEqual(function ($item1, $item2) {
+    // Do your stuff !
+})
+->whenDifferent(function ($item1, $item2) {
     // Do your stuff !
 })
 ->whenMissingRight(function ($item1) {
