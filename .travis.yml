@@ -1,14 +1,24 @@
 language: php
 
 php:
-  - 5.3
   - 5.4
   - 5.5
   - 5.6
-  - hhvm
+  - 7.0
+  - 7.1
+  - 7.2
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - php: nightly
+
+cache:
+  directories:
+    - $HOME/.composer/cache
 
 before_script:
-  - composer install --no-progress
+  - composer install -n
 
 script:
-  - phpunit
+  - vendor/bin/phpunit
