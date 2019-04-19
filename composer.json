@@ -6,8 +6,8 @@
     "homepage": "https://github.com/myclabs/ArrayComparator",
     "license": "MIT",
     "autoload": {
-        "psr-0": {
-            "ArrayComparator": "src/"
+        "psr-4": {
+            "ArrayComparator\\": "src/ArrayComparator/"
         }
     },
     "require": {
