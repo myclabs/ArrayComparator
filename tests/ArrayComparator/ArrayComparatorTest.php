@@ -2,9 +2,9 @@
 
 namespace ArrayComparator;
 
-require_once __DIR__ . '/../../vendor/autoload.php';
+use PHPUnit\Framework\TestCase;
 
-class ArrayComparatorTest extends \PHPUnit_Framework_TestCase
+class ArrayComparatorTest extends TestCase
 {
 
     public function testNoError()
