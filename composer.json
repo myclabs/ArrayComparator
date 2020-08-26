@@ -10,6 +10,11 @@
             "ArrayComparator\\": "src/ArrayComparator/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "ArrayComparator\\Tests\\": "tests/ArrayComparator/"
+        }
+    },
     "require": {
         "php": ">=5.4.0"
     },

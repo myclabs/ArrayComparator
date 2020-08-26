@@ -1,7 +1,8 @@
 <?php
 
-namespace ArrayComparator;
+namespace ArrayComparator\Tests;
 
+use ArrayComparator\ArrayComparator;
 use PHPUnit\Framework\TestCase;
 
 class ArrayComparatorTest extends TestCase
@@ -70,14 +71,14 @@ class ArrayComparatorTest extends TestCase
         $testCase = $this;
         $comparator->whenMissingRight(
             function ($item1) use (&$callCount, $testCase) {
-                $testCase->assertEquals('foo', $item1);
+                $testCase->assertSame('foo', $item1);
                 $callCount++;
             }
         );
 
         $comparator->compare(array('foo'), array());
 
-        $this->assertEquals(1, $callCount);
+        $this->assertSame(1, $callCount);
     }
 
     /**
@@ -107,14 +108,14 @@ class ArrayComparatorTest extends TestCase
         $testCase = $this;
         $comparator->whenMissingLeft(
             function ($item2) use (&$callCount, $testCase) {
-                $testCase->assertEquals('foo', $item2);
+                $testCase->assertSame('foo', $item2);
                 $callCount++;
             }
         );
 
         $comparator->compare(array(), array('foo'));
 
-        $this->assertEquals(1, $callCount);
+        $this->assertSame(1, $callCount);
     }
 
     /**
@@ -144,15 +145,15 @@ class ArrayComparatorTest extends TestCase
         $testCase = $this;
         $comparator->whenDifferent(
             function ($item1, $item2) use (&$callCount, $testCase) {
-                $testCase->assertEquals('foo', $item1);
-                $testCase->assertEquals('bar', $item2);
+                $testCase->assertSame('foo', $item1);
+                $testCase->assertSame('bar', $item2);
                 $callCount++;
             }
         );
 
         $comparator->compare(array('foo'), array('bar'));
 
-        $this->assertEquals(1, $callCount);
+        $this->assertSame(1, $callCount);
     }
 
     /**
@@ -182,15 +183,15 @@ class ArrayComparatorTest extends TestCase
         $testCase = $this;
         $comparator->whenDifferent(
             function ($item1, $item2) use (&$callCount, $testCase) {
-                $testCase->assertEquals('bar', $item1);
-                $testCase->assertEquals('baz', $item2);
+                $testCase->assertSame('bar', $item1);
+                $testCase->assertSame('baz', $item2);
                 $callCount++;
             }
         );
 
         $comparator->compare(array('foo' => 'bar'), array('foo' => 'baz'));
 
-        $this->assertEquals(1, $callCount);
+        $this->assertSame(1, $callCount);
     }
 
     /**
@@ -241,15 +242,15 @@ class ArrayComparatorTest extends TestCase
         $testCase = $this;
         $comparator->whenDifferent(
             function ($item1, $item2) use (&$callCount, $testCase) {
-                $testCase->assertEquals('foo', $item1->name);
-                $testCase->assertEquals('bar', $item2->name);
+                $testCase->assertSame('foo', $item1->name);
+                $testCase->assertSame('bar', $item2->name);
                 $callCount++;
             }
         );
 
         $comparator->compare(array(1 => $object1), array(2 => $object2));
 
-        $this->assertEquals(1, $callCount);
+        $this->assertSame(1, $callCount);
     }
 
     /**
@@ -287,15 +288,15 @@ class ArrayComparatorTest extends TestCase
         $testCase = $this;
         $comparator->whenDifferent(
             function ($item1, $item2) use (&$callCount, $testCase) {
-                $testCase->assertEquals('foo', $item1->name);
-                $testCase->assertEquals('bar', $item2->name);
+                $testCase->assertSame('foo', $item1->name);
+                $testCase->assertSame('bar', $item2->name);
                 $callCount++;
             }
         );
 
         $comparator->compare(array(1 => $object1), array(2 => $object2));
 
-        $this->assertEquals(1, $callCount);
+        $this->assertSame(1, $callCount);
     }
 
     /**
@@ -354,7 +355,7 @@ class ArrayComparatorTest extends TestCase
 
         $comparator->compare(array($object1), array($object2));
 
-        $this->assertEquals(1, $callCountEqual);
+        $this->assertSame(1, $callCountEqual);
     }
 
     /**
@@ -369,7 +370,7 @@ class ArrayComparatorTest extends TestCase
         $callCountRight = 0;
         $comparator->whenMissingRight(
             function ($item) use (&$callCountRight, $testCase) {
-                $testCase->assertEquals('bar', $item);
+                $testCase->assertSame('bar', $item);
                 $callCountRight++;
             }
         );
@@ -377,7 +378,7 @@ class ArrayComparatorTest extends TestCase
         $callCountLeft = 0;
         $comparator->whenMissingLeft(
             function ($item) use (&$callCountLeft, $testCase) {
-                $testCase->assertEquals('baz', $item);
+                $testCase->assertSame('baz', $item);
                 $callCountLeft++;
             }
         );
@@ -395,8 +396,8 @@ class ArrayComparatorTest extends TestCase
 
         $comparator->compare(array('foo' => 'bar'), array('bim' => 'baz'));
 
-        $this->assertEquals(1, $callCountRight);
-        $this->assertEquals(1, $callCountLeft);
+        $this->assertSame(1, $callCountRight);
+        $this->assertSame(1, $callCountLeft);
     }
 
     /**
@@ -441,10 +442,10 @@ class ArrayComparatorTest extends TestCase
             array('bim' => 'baz', 'foo' => '1', 'fuu' => '21', 'bar' => '51')
         );
 
-        $this->assertEquals(1, $callCountEqual);
-        $this->assertEquals(2, $callCountDifferent);
-        $this->assertEquals(1, $callCountRight);
-        $this->assertEquals(1, $callCountLeft);
+        $this->assertSame(1, $callCountEqual);
+        $this->assertSame(2, $callCountDifferent);
+        $this->assertSame(1, $callCountRight);
+        $this->assertSame(1, $callCountLeft);
     }
 
     /**
